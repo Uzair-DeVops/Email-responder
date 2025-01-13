@@ -212,8 +212,6 @@ if emails:
                             st.text(f"{idx}. {email['subject']} (From: {email['sender']})")
                     else:
                         st.text("No responded emails yet.")
-        else:
-            st.error("Failed to send the response.")
 
 else:
     st.write("No unread emails found.")
