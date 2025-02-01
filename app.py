@@ -76,7 +76,7 @@ def extract_and_respond(email_data):
     The following is raw email data. Extract the following details:
     - Sender's Email
     - Email Subject
-    - Email Content (prefer Plain Text if available, otherwise use HTML Part)
+    - Email Content (prefer Plain Text if available, otherwise use HTML Part give me all the content in the email)
 
     Email data:
     {email_data}
@@ -163,15 +163,14 @@ emails = list_emails(service)
 responded_emails = []
 
 if emails:
-    col1, col2 = st.columns([1, 1])
-    
-    # Left sidebar (Unread Emails)
-    with col1:
-        st.write("### Unread Emails")
-        for idx, email in enumerate(emails, 1):
-            st.text(f"{idx}. {email['subject']} (From: {email['sender']})")
-            if check_if_responded(service, email['id']):
-                responded_emails.append({'subject': email['subject'], 'sender': email['sender']})
+    st.sidebar.header("Emails")
+
+    # Sidebar: Unread Emails
+    st.sidebar.subheader("Unread Emails")
+    for idx, email in enumerate(emails, 1):
+        st.sidebar.text(f"{idx}. {email['subject']} (From: {email['sender']})")
+
+    # Sidebar: Responded Emails
 
     # Right sidebar (Responded Emails)
     st.write("### Select an email to view details")
@@ -205,13 +204,13 @@ if emails:
                 mark_as_read(service, selected_email['id'])
                 # Add this email to responded list
                 responded_emails.append({'subject': details['Subject'], 'sender': details['Sender']})
-                with col2:
-                    st.write("### Responded Emails")
-                    if responded_emails:
+                st.sidebar.subheader("Responded Emails")
+                if responded_emails:
                         for idx, email in enumerate(responded_emails, 1):
-                            st.text(f"{idx}. {email['subject']} (From: {email['sender']})")
-                    else:
-                        st.text("No responded emails yet.")
+                            st.sidebar.text(f"{idx}. {email['subject']} (From: {email['sender']})")
+                else:
+                        st.sidebar.text("No responded emails yet.")
+
 
 else:
     st.write("No unread emails found.")
